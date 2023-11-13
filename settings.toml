@@ -1,0 +1,2 @@
+CIRCUITPY_WIFI_SSID = "<your network>"
+CIRCUITPY_WIFI_PASSWORD = "<your password>"
