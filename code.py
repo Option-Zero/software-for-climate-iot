@@ -37,9 +37,9 @@ def initialize_sensors():
     i2c = busio.I2C(board.SCL, board.SDA)
 
     try:
-        pm25_sensor = PM25_I2C(i2c)
+        air_quality_sensor = PM25_I2C(i2c)
     except RuntimeError:
-        pm25_sensor = None
+        air_quality_sensor = None
 
     try:
         co2_sensor = SCD4X(i2c)
@@ -57,7 +57,7 @@ def initialize_sensors():
     except RuntimeError:
         battery_sensor = None
 
-    return pm25_sensor, co2_sensor, temperature_sensor, battery_sensor
+    return air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor
 
 def post_to_db(sensor_data: dict): 
     ''' Store sensor data in our supabase DB '''
@@ -89,20 +89,24 @@ def post_to_db(sensor_data: dict):
         print('Post complete')
 
 
-def collect_data(pm25_sensor, co2_sensor, temperature_sensor, battery_sensor):
+def collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor):
     ''' Get the latest data from the sensors, display it, and record it in the cloud. '''
     # Python3 kwarg-style dict concatenation syntax doesn't seem to work in CircuitPython,
     # so we have to use mutation and update the dict as we go along
     all_sensor_data = {}
 
-    if pm25_sensor:
-        all_air_quality_data = pm25_sensor.read() if pm25_sensor else {}
+    if air_quality_sensor:
+        # This sensor collects the following data:
+        # PM1.0, PM2.5 and PM10.0 concentration in both standard (at sea level) & enviromental units (at ambient pressure)
+        # Particulate matter per 0.1L air, categorized into 0.3um, 0.5um, 1.0um, 2.5um, 5.0um and 10um size bins
 
-        # air_quality_data has a whole lot of keys. Let's just pull out the ones we care about
-        all_sensor_data.update({
-            'pm2.5': all_air_quality_data['pm25 standard'],
-            'pm100': all_air_quality_data['pm100 standard'],
-        })
+        # The data is structured as a dictionary with keys of this format:
+        # "pmXX standard"   : PMX.X concentration at standard pressure (sea level)
+        # "pmXX env"        : PMX.X concentration at ambient pressure
+        # "particles XXum"  : Pariculate matter of size > X.Xum per 0.1L air
+        air_quality_data = air_quality_sensor.read() if air_quality_sensor else {}
+
+        all_sensor_data.update(air_quality_data)
 
     if battery_sensor:
         all_sensor_data.update({
@@ -119,21 +123,25 @@ def collect_data(pm25_sensor, co2_sensor, temperature_sensor, battery_sensor):
 
     if temperature_sensor:
         all_sensor_data.update({
-            # Note: the CO2 sensor also collects temperature. If you have both, we default to the
-            # data collected by this dedicated temperature sensor
-            'temperature_c': temperature_sensor.temperature
+            # Note: the CO2 sensor also collects temperature and relative humidity
+            # If you have both, we default to the data collected by this temperature sensor
+            'temperature_c': temperature_sensor.temperature,
+            'humidity_relative': temperature_sensor.relative_humidity,
+            'pressure_hpa': temperature_sensor.pressure,
+            'altitude_m': temperature_sensor.altitude,
         })
 
     print(all_sensor_data)
     post_to_db(all_sensor_data)
 
 
-pm25_sensor, co2_sensor, temperature_sensor, battery_sensor = initialize_sensors()
+air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor = initialize_sensors()
 
 while True:
     try:
-        collect_data(pm25_sensor, co2_sensor, temperature_sensor, battery_sensor)
+        collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor)
     except (RuntimeError, OSError) as e:
         # Sometimes this is invalid PM2.5 checksum or timeout
         print(e)
+
     time.sleep(LOOP_TIME_S)
