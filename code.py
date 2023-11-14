@@ -3,12 +3,9 @@ import time
 import json
 import busio
 import board
-import neopixel
 import ssl
 import wifi
 import socketpool
-import displayio
-from adafruit_datetime import datetime
 from adafruit_pm25.i2c import PM25_I2C
 from adafruit_bme280.basic import Adafruit_BME280_I2C as BME280
 from adafruit_scd4x import SCD4X
@@ -99,7 +96,7 @@ def collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sen
         # The data is structured as a dictionary with keys of this format:
         # "pmXX standard"   : PMX.X concentration at standard pressure (sea level)
         # "pmXX env"        : PMX.X concentration at ambient pressure
-        # "particles XXum"  : Pariculate matter of size > X.Xum per 0.1L air
+        # "particles XXum"  : Particulate matter of size > X.Xum per 0.1L air
         air_quality_data = air_quality_sensor.read() if air_quality_sensor else {}
 
         all_sensor_data.update(air_quality_data)
