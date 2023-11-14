@@ -34,23 +34,23 @@ def initialize_sensors():
 
     try:
         air_quality_sensor = PM25_I2C(i2c)
-    except RuntimeError:
+    except Exception:
         air_quality_sensor = None
 
     try:
         co2_sensor = SCD4X(i2c)
         co2_sensor.start_periodic_measurement()
-    except RuntimeError:
+    except Exception:
         co2_sensor = None
     
     try:
         temperature_sensor = BME280(i2c)
-    except RuntimeError:
+    except Exception:
         temperature_sensor = None
 
     try: 
         battery_sensor = MAX17048(i2c)
-    except RuntimeError:
+    except Exception:
         battery_sensor = None
 
     return air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor
