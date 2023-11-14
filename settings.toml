@@ -1,2 +1,12 @@
+## Wifi
 CIRCUITPY_WIFI_SSID = "<your network>"
 CIRCUITPY_WIFI_PASSWORD = "<your password>"
+
+## Data collection constants
+# Choose a unique device ID for your device, e.g. "yourname-co2-temperature"
+DEVICE_ID = None
+
+# Public/anonymous connection info for our supabase instance
+# (Yep, we've just put the access key in plaintext here :o )
+SUPABASE_POST_URL = "https://llhfnnvekwquqvhxyhtz.supabase.co/rest/v1/iot"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaGZubnZla3dxdXF2aHh5aHR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyMzM3NDUsImV4cCI6MjAxMjgwOTc0NX0.eNxux3E_ZSqkkQV5KGkaKnSVy0EAXrfQVhu-lFrPHx8"

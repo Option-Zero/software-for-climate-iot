@@ -15,16 +15,12 @@ from adafruit_scd4x import SCD4X
 from adafruit_max1704x import MAX17048
 import adafruit_requests
 
-# Choose a unique device ID for your device, e.g. "yourname-co2-temperature"
-DEVICE_ID = None
+DEVICE_ID = os.getenv('DEVICE_ID')
+SUPABASE_POST_URL = os.getenv('SUPABASE_POST_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 # This controls how often your device sends data to the database
 LOOP_TIME_S = 60
-
-# Public/anonymous connection info for our supabase instance
-# (Yep, we've just put the access key in plaintext here :o )
-SUPABASE_POST_URL = "https://llhfnnvekwquqvhxyhtz.supabase.co/rest/v1/iot"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaGZubnZla3dxdXF2aHh5aHR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyMzM3NDUsImV4cCI6MjAxMjgwOTc0NX0.eNxux3E_ZSqkkQV5KGkaKnSVy0EAXrfQVhu-lFrPHx8"
 
 # Prepare to use the internet 💫
 wifi.radio.connect(os.getenv("CIRCUITPY_WIFI_SSID"), os.getenv("CIRCUITPY_WIFI_PASSWORD"))
