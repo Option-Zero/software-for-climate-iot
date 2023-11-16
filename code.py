@@ -26,7 +26,7 @@ LOOP_TIME_S = 60
 
 
 # Prepare to use the internet 💫
-def setup_wifi():
+def initialize_wifi_connection():
     # This is inside a function so that we can call it later if we need to reestablish
     # the connection.
     wifi.radio.connect(
@@ -34,10 +34,9 @@ def setup_wifi():
     )
 
 
-setup_wifi()
+initialize_wifi_connection()
 pool = socketpool.SocketPool(wifi.radio)
 requests = adafruit_requests.Session(pool, ssl.create_default_context())
-requests = setup_wifi()
 
 
 def initialize_sensors():
@@ -46,7 +45,7 @@ def initialize_sensors():
 
     try:
         air_quality_sensor = PM25_I2C(i2c)
-    except RuntimeError:
+    except Exception:
         print("No PM2.5 air quality sensor found")
         air_quality_sensor = None
 
@@ -96,7 +95,7 @@ def post_to_db(sensor_data: dict):
         )
     except socketpool.SocketPool.gaierror as e:
         print(f"ConnectionError: {e}. Restarting networking.")
-        setup_wifi()
+        initialize_wifi_connection()
         # Attempt to store some diagnostic data about this error
         sensor_data.update(
             {"network_reset": True, "network_stacktrace": traceback.format_exception(e)}
