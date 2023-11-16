@@ -1,20 +1,21 @@
-import busio
-import board
-import os
-import time
 import json
-import microcontroller
+import os
 import ssl
-import wifi
+import time
 import traceback
-import socketpool
-from adafruit_datetime import datetime
-from adafruit_pm25.i2c import PM25_I2C
-from adafruit_bme280.basic import Adafruit_BME280_I2C as BME280
-from adafruit_scd30 import SCD30
-from adafruit_scd4x import SCD4X
-from adafruit_max1704x import MAX17048
+
 import adafruit_requests
+import board
+import busio
+import microcontroller
+import socketpool
+import wifi
+from adafruit_bme280.basic import Adafruit_BME280_I2C as BME280
+from adafruit_datetime import datetime
+from adafruit_max1704x import MAX17048
+from adafruit_pm25.i2c import PM25_I2C
+from adafruit_scd4x import SCD4X
+from adafruit_scd30 import SCD30
 
 DEVICE_ID = os.getenv('DEVICE_ID')
 SUPABASE_POST_URL = os.getenv('SUPABASE_POST_URL')
