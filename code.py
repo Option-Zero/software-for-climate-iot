@@ -1,13 +1,17 @@
+import busio
+import board
 import os
 import time
 import json
-import busio
-import board
+import microcontroller
 import ssl
 import wifi
+import traceback
 import socketpool
+from adafruit_datetime import datetime
 from adafruit_pm25.i2c import PM25_I2C
 from adafruit_bme280.basic import Adafruit_BME280_I2C as BME280
+from adafruit_scd30 import SCD30
 from adafruit_scd4x import SCD4X
 from adafruit_max1704x import MAX17048
 import adafruit_requests
@@ -20,9 +24,15 @@ SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 LOOP_TIME_S = 60
 
 # Prepare to use the internet 💫
-wifi.radio.connect(os.getenv("CIRCUITPY_WIFI_SSID"), os.getenv("CIRCUITPY_WIFI_PASSWORD"))
+def setup_wifi():
+    # This is inside a function so that we can call it later if we need to reestablish
+    # the connection.
+    wifi.radio.connect(os.getenv("CIRCUITPY_WIFI_SSID"), os.getenv("CIRCUITPY_WIFI_PASSWORD"))
+
+setup_wifi()
 pool = socketpool.SocketPool(wifi.radio)
 requests = adafruit_requests.Session(pool, ssl.create_default_context())
+requests = setup_wifi()
 
 def initialize_sensors():
     '''Initialize connections to each possible sensor, if connected
@@ -31,23 +41,27 @@ def initialize_sensors():
 
     try:
         air_quality_sensor = PM25_I2C(i2c)
-    except Exception:
+    except RuntimeError:
+        print('No PM2.5 air quality sensor found')
         air_quality_sensor = None
 
     try:
         co2_sensor = SCD4X(i2c)
         co2_sensor.start_periodic_measurement()
     except Exception:
+        print('No CO2 sensor found')
         co2_sensor = None
-    
+
     try:
         temperature_sensor = BME280(i2c)
     except Exception:
+        print('No temperature sensor found')
         temperature_sensor = None
 
     try: 
         battery_sensor = MAX17048(i2c)
     except Exception:
+        print('No battery sensor found')
         battery_sensor = None
 
     return air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor
@@ -58,19 +72,30 @@ def post_to_db(sensor_data: dict):
         raise Exception("Please set a unique device id!")
 
     print("Posting to DB")
-    response = requests.post(
-        url=SUPABASE_POST_URL,
-        headers={
-            'apikey': SUPABASE_KEY,
-            'Authorization': f'bearer {SUPABASE_KEY}',
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal',
-        },
-        data=json.dumps({
-            'device_id': DEVICE_ID,
-            'content': sensor_data,
-        }),
-    )
+    try:
+        response = requests.post(
+            url=SUPABASE_POST_URL,
+            headers={
+                'apikey': SUPABASE_KEY,
+                'Authorization': f'bearer {SUPABASE_KEY}',
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal',
+            },
+            data=json.dumps({
+                'device_id': DEVICE_ID,
+                'content': sensor_data,
+            }),
+        )
+    except socketpool.SocketPool.gaierror as e:
+        print(f'ConnectionError: {e}. Restarting networking.')
+        setup_wifi()
+        # Attempt to store some diagnostic data about this error
+        sensor_data.update({
+            'network_reset': True,
+            'network_stacktrace': traceback.format_exception(e)
+        })
+        print('Recursively retrying post with saved stacktrace.')
+        response = post_to_db(sensor_data)
 
     # PostgREST only sends response to a POST when something is wrong
     error_details = response.content
@@ -135,6 +160,12 @@ while True:
         collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor)
     except (RuntimeError, OSError) as e:
         # Sometimes this is invalid PM2.5 checksum or timeout
-        print(e)
+        print(f"{type(e)}: {e}")
+        if str(e) == 'pystack exhausted':
+            # This happens when our recursive retry logic fails.
+            print('Unable to recover from an error. Rebooting in 10s.')
+            time.sleep(10)
+            microcontroller.on_next_reset(microcontroller.RunMode.NORMAL)
+            microcontroller.reset()
 
     time.sleep(LOOP_TIME_S)
