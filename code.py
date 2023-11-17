@@ -46,7 +46,7 @@ def initialize_sensors():
     try:
         air_quality_sensor = PM25_I2C(i2c)
     except Exception:
-        print("No PM2.5 air quality sensor found")
+        print("No air quality sensor found")
         air_quality_sensor = None
 
     try:
