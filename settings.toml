@@ -8,5 +8,10 @@ DEVICE_ID = None
 
 # Public/anonymous connection info for our supabase instance
 # (Yep, we've just put the access key in plaintext here :o )
-SUPABASE_POST_URL = "https://llhfnnvekwquqvhxyhtz.supabase.co/rest/v1/iot"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaGZubnZla3dxdXF2aHh5aHR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcyMzM3NDUsImV4cCI6MjAxMjgwOTc0NX0.eNxux3E_ZSqkkQV5KGkaKnSVy0EAXrfQVhu-lFrPHx8"
+SUPABASE_POST_URL = "https://nowoepphtlvvczgexvrb.supabase.co/rest/v1/iot"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vd29lcHBodGx2dmN6Z2V4dnJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQwNTcyOTEsImV4cCI6MjAxOTYzMzI5MX0.5GLRS74f_2lHi5y90yTzUtK2xpm0kSjP8MhkWFW2yDI"
+
+
+# Uncomment this to enable the built-in web interface
+# CIRCUITPY_WEB_API_PASSWORD = "code4climate"
+# CIRCUITPY_WEB_API_PORT = 80
