@@ -15,7 +15,6 @@ from adafruit_datetime import datetime
 from adafruit_max1704x import MAX17048
 from adafruit_pm25.i2c import PM25_I2C
 from adafruit_scd4x import SCD4X
-from adafruit_scd30 import SCD30
 
 DEVICE_ID = os.getenv("DEVICE_ID")
 SUPABASE_POST_URL = os.getenv("SUPABASE_POST_URL")
