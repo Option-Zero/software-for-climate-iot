@@ -8,5 +8,5 @@ DEVICE_ID = None
 
 # Public/anonymous connection info for our supabase instance
 # (Yep, we've just put the access key in plaintext here :o )
-SUPABASE_POST_URL = "https://nowoepphtlvvczgexvrb.supabase.co/rest/v1/iot"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5vd29lcHBodGx2dmN6Z2V4dnJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDQwNTcyOTEsImV4cCI6MjAxOTYzMzI5MX0.5GLRS74f_2lHi5y90yTzUtK2xpm0kSjP8MhkWFW2yDI"
+SUPABASE_POST_URL = "https://jvnfqnseyxaiiybpxzrt.supabase.co/rest/v1/iot"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2bmZxbnNleXhhaWl5YnB4enJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTEzODU2MDgsImV4cCI6MjAyNjk2MTYwOH0.dFUNhtOkzF2wf-k42qAvj-O2LKJiCbFIEkCPf5im5tg"
