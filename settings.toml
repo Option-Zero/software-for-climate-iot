@@ -6,6 +6,12 @@ CIRCUITPY_WIFI_PASSWORD = "<your password>"
 # Choose a unique device ID for your device, e.g. "yourname-co2-temperature"
 DEVICE_ID = None
 
+# Set a location (recommended: "indoors" or "outdoors").
+# You can be more specific, but:
+# - don't include anything you're not willing to share with the class.
+# - still include the word "indoors" or "outdoors" so that fellows can string-match.
+LOCATION = "not set"
+
 # Public/anonymous connection info for our supabase instance
 # (Yep, we've just put the access key in plaintext here :o )
 SUPABASE_POST_URL = "https://sjfsnmkyzoywjhorlkmx.supabase.co/rest/v1/iot"
