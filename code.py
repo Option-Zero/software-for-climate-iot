@@ -11,7 +11,6 @@ import microcontroller
 import socketpool
 import wifi
 from adafruit_bme280.basic import Adafruit_BME280_I2C as BME280
-from adafruit_datetime import datetime
 from adafruit_max1704x import MAX17048
 from adafruit_pm25.i2c import PM25_I2C
 from adafruit_scd4x import SCD4X
@@ -19,6 +18,7 @@ from adafruit_scd4x import SCD4X
 DEVICE_ID = os.getenv("DEVICE_ID")
 SUPABASE_POST_URL = os.getenv("SUPABASE_POST_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+LOCATION = os.getenv("LOCATION")
 
 # This controls how often your device sends data to the database
 LOOP_TIME_S = 60
@@ -71,9 +71,19 @@ def initialize_sensors():
 
 
 def post_to_db(sensor_data: dict):
-    """Store sensor data in our supabase DB"""
+    """Store sensor data in our supabase DB along with appropriate metadata"""
     if not DEVICE_ID:
         raise Exception("Please set a unique device id!")
+    
+    # Prepare the database row, augmenting the sensor data with metadata
+    db_row = {
+        "device_id": DEVICE_ID,
+        "content": dict(
+            location=LOCATION,
+            **sensor_data
+        ),
+    }
+    print(db_row)
 
     print("Posting to DB")
     try:
@@ -85,12 +95,7 @@ def post_to_db(sensor_data: dict):
                 "Content-Type": "application/json",
                 "Prefer": "return=minimal",
             },
-            data=json.dumps(
-                {
-                    "device_id": DEVICE_ID,
-                    "content": sensor_data,
-                }
-            ),
+            data=json.dumps(db_row),
         )
     except socketpool.SocketPool.gaierror as e:
         print(f"ConnectionError: {e}. Restarting networking.")
@@ -160,7 +165,6 @@ def collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sen
             }
         )
 
-    print(all_sensor_data)
     post_to_db(all_sensor_data)
 
 
