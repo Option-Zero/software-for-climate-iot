@@ -14,5 +14,5 @@ LOCATION = "not set"
 
 # Public/anonymous connection info for our supabase instance
 # (Yep, we've just put the access key in plaintext here :o )
-SUPABASE_POST_URL = "https://xyjgydxlpzfsrqxtqfsz.supabase.co/rest/v1/iot"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh5amd5ZHhscHpmc3JxeHRxZnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjY4NjIyNDgsImV4cCI6MjA0MjQzODI0OH0.l5dz3Lv1YPbr_l_Y-Vw2qPuC2DDUYFwMTvGhDlRxFDM"
+SUPABASE_POST_URL = "https://quakzdcsawtiigpkqcmp.supabase.co/rest/v1/iot"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1YWt6ZGNzYXd0aWlncGtxY21wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczOTgxNzUsImV4cCI6MjA1Mjk3NDE3NX0.VyBLZCYygtiQn4jy7hmtExQOI3a12biu_H4B8s3QAOM"
