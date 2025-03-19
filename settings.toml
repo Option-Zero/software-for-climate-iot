@@ -16,3 +16,7 @@ LOCATION = "not set"
 # Get these from the assignment instructions
 SUPABASE_POST_URL = ""
 SUPABASE_KEY = ""
+
+# Web API settings - uncomment to enable
+# CIRCUITPY_WEB_API_PASSWORD = "code4climate"
+# CIRCUITPY_WEB_API_PORT = 80
