@@ -13,6 +13,6 @@ DEVICE_ID = None
 LOCATION = "not set"
 
 # Public/anonymous connection info for our supabase instance
-# (Yep, we've just put the access key in plaintext here :o )
-SUPABASE_POST_URL = "https://quakzdcsawtiigpkqcmp.supabase.co/rest/v1/iot"
-SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1YWt6ZGNzYXd0aWlncGtxY21wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczOTgxNzUsImV4cCI6MjA1Mjk3NDE3NX0.VyBLZCYygtiQn4jy7hmtExQOI3a12biu_H4B8s3QAOM"
+# Get these from the assignment instructions
+SUPABASE_POST_URL = ""
+SUPABASE_KEY = ""
