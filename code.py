@@ -15,6 +15,10 @@ from adafruit_max1704x import MAX17048
 from adafruit_pm25.i2c import PM25_I2C
 from adafruit_scd4x import SCD4X
 
+# Check and load environment variables
+for required_env in ["DEVICE_ID", "SUPABASE_POST_URL", "SUPABASE_KEY", "LOCATION"]:
+    if not os.getenv(required_env):
+        raise Exception(f"Please set {required_env} in settings.toml")
 DEVICE_ID = os.getenv("DEVICE_ID")
 SUPABASE_POST_URL = os.getenv("SUPABASE_POST_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -74,14 +78,11 @@ def post_to_db(sensor_data: dict):
     """Store sensor data in our supabase DB along with appropriate metadata"""
     if not DEVICE_ID:
         raise Exception("Please set a unique device id!")
-    
+
     # Prepare the database row, augmenting the sensor data with metadata
     db_row = {
         "device_id": DEVICE_ID,
-        "content": dict(
-            location=LOCATION,
-            **sensor_data
-        ),
+        "content": dict(location=LOCATION, **sensor_data),
     }
     print(db_row)
 
