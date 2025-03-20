@@ -116,6 +116,7 @@ def post_to_db(sensor_data: dict):
         raise Exception(error_details)
     else:
         print("Post complete")
+        return response
 
 
 def collect_data(air_quality_sensor, co2_sensor, temperature_sensor, battery_sensor):
