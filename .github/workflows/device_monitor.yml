@@ -2,9 +2,9 @@ name: Device Data Monitor
 
 on:
   schedule:
-    - cron: '0 8 * * *'  # 8 AM UTC
-    - cron: '0 12 * * *' # 12 PM UTC
-    - cron: '0 17 * * *' # 5 PM UTC
+    - cron: '0 16 * * *'  # 8 AM Pacific
+    - cron: '0 20 * * *'  # 12 PM Pacific
+    - cron: '0 1 * * *'   # 5 PM Pacific (next day UTC)
   workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
